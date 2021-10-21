@@ -65,7 +65,7 @@ def minimaxAB(cur_state, depth, alpha, beta): # return State in Ultimate
         return (best_move, beta)
 
 def cost(cur_state):
-    return 1
+    return 2
 
 # def cost(cur_state):
 #     return cost_player(cur_state, 1) - cost_player(cur_state, -1)
@@ -94,7 +94,7 @@ def cost(cur_state):
 #         count += 1
 #     if(local_board[2]!= -1*cur_state.player_to_move and local_board[4]!= -1*cur_state.player_to_move and local_board[6]!= -1*cur_state.player_to_move):
 #         count += 1
-#     return count*cur_state.player_to_move
+#     return count
 
 # self.global_cells = np.zeros(9)
 # self.blocks = np.array([np.zeros((3, 3)) for x in range(9)])

@@ -72,7 +72,7 @@ def draw(state: State_2):
     pygame.display.update()
     
 
-def play_step_by_step(player_X, player_O, rule = 2):
+def play_step_by_step(player_X, player_O, rule = 1):
     player_1 = import_module(player_X)
     player_2 = import_module(player_O)
     if rule == 1:
