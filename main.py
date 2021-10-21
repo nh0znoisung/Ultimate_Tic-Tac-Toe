@@ -57,6 +57,6 @@ def main(player_X, player_O, rule = 1):
     print("O:", cur_state.count_O)
 
 
-main('random_agent', '_MSSV')
+main('random_agent', '_1910663_1914637_1914405')
 
  
