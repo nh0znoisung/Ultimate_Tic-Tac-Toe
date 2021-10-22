@@ -72,7 +72,7 @@ def main(player_X, player_O, rule = 1):
 cnt = 50
 for i in range(cnt):
     print("Phrase {}:".format(i))
-    main('_1910663_1914637_1914405', 'random_agent')
+    main('random_agent','_1910663_1914637_1914405', 1)
 
 print("          | Win | Lose | Draw")
 print("Player 1  | {} | {} | {}".format(win, cnt - win - draw, draw))

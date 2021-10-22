@@ -2,12 +2,14 @@ import numpy as np
 import math
 import random
 from copy import deepcopy
+from state import State
 
 maxDepth = 3
 
 def select_move(cur_state, remain_time): # return move in valid_moves -> UltimateTTT + Time ups
     (best_move, cur_cost) = minimaxAB(cur_state, 0, -math.inf, math.inf)
     return best_move
+
 
 
 def minimaxAB(cur_state, depth, alpha, beta): # return State in Ultimate
@@ -21,12 +23,12 @@ def minimaxAB(cur_state, depth, alpha, beta): # return State in Ultimate
     # print("Hello World 2")
     
     if depth == maxDepth:
-        return (None, cost(cur_state))
+        return (None, evalFunction(cur_state))
     # print("Hello World 3")
 
 
     valid_moves = cur_state.get_valid_moves
-    random.shuffle(valid_moves) # random the list for the fair chance
+    #random.shuffle(valid_moves) # random the list for the fair chance
     # print("Hello World 4")
 
     if cur_state.player_to_move == 1:
@@ -38,11 +40,11 @@ def minimaxAB(cur_state, depth, alpha, beta): # return State in Ultimate
             new_state.act_move(move)
             (new_move, new_cost) = minimaxAB(new_state, depth + 1, alpha, beta)
 
-            if new_cost > alpha:
+            if new_cost >= alpha:
                 alpha = new_cost
                 best_move = move
 
-            if alpha >= beta:
+            if beta <= alpha    :
                 break
         return (best_move, alpha)
 
@@ -55,17 +57,17 @@ def minimaxAB(cur_state, depth, alpha, beta): # return State in Ultimate
             new_state.act_move(move)
             (new_move, new_cost) = minimaxAB(new_state, depth + 1, alpha, beta)
             
-            if new_cost < beta:
+            if new_cost <= beta:
                 beta = new_cost
                 best_move = move
 
-            if alpha >= beta:
+            if beta <= alpha:
                 break   
         # print(cost_block(cur_state))
         return (best_move, beta)
 
 def cost(cur_state):
-    return 2
+    return 1 
 
 # def cost(cur_state):
 #     return cost_player(cur_state, 1) - cost_player(cur_state, -1)
@@ -77,24 +79,87 @@ def cost(cur_state):
 # #     # Count how many way we can win this game
 # #     return 0
 
-# def cost_block(cur_state):
-#     index_local_board = cur_state.previous_move.x * 3 + cur_state.previous_move.y
+def cost_block(cur_state):
+    index_local_board = cur_state.previous_move.x * 3 + cur_state.previous_move.y
     
-#     local_board = cur_state.blocks[index_local_board].reshape(9)
-#     count = 0
-#     i = 0
-#     for p in range(0,3):
-#         if(local_board[i]!= -1*cur_state.player_to_move and local_board[i+1]!= -1*cur_state.player_to_move and local_board[i+2]!= -1*cur_state.player_to_move):
-#             count +=1
-#         i += 3
-#     for i in range(0,3):
-#         if(local_board[i]!= -1*cur_state.player_to_move and local_board[i+3]!= -1*cur_state.player_to_move and local_board[i+6]!= -1*cur_state.player_to_move):
-#             count +=1
-#     if(local_board[0]!= -1*cur_state.player_to_move and local_board[4]!= -1*cur_state.player_to_move and local_board[8]!= -1*cur_state.player_to_move):
-#         count += 1
-#     if(local_board[2]!= -1*cur_state.player_to_move and local_board[4]!= -1*cur_state.player_to_move and local_board[6]!= -1*cur_state.player_to_move):
-#         count += 1
-#     return count
+    local_board = cur_state.blocks[index_local_board].reshape(9)
+    count = 0
+    i = 0
 
+    for p in range(0,3):
+        if(local_board[i]!= -1*cur_state.player_to_move and local_board[i+1]!= -1*cur_state.player_to_move and local_board[i+2]!= -1*cur_state.player_to_move):
+            count +=1
+        i += 3
+    for i in range(0,3):
+        if(local_board[i]!= -1*cur_state.player_to_move and local_board[i+3]!= -1*cur_state.player_to_move and local_board[i+6]!= -1*cur_state.player_to_move):
+            count +=1
+    if(local_board[0]!= -1*cur_state.player_to_move and local_board[4]!= -1*cur_state.player_to_move and local_board[8]!= -1*cur_state.player_to_move):
+        count += 1
+    if(local_board[2]!= -1*cur_state.player_to_move and local_board[4]!= -1*cur_state.player_to_move and local_board[6]!= -1*cur_state.player_to_move):
+        count += 1
+    return count
+
+
+
+def evalFunction(cur_state):
+
+    index_local_board = cur_state.previous_move.x * 3 + cur_state.previous_move.y
+    local_board = cur_state.blocks[index_local_board].reshape(9)
+
+    row_sum = np.sum(cur_state.blocks[index_local_board],1)
+    col_sum = np.sum(cur_state.blocks[index_local_board],0)
+    diagional_Left = local_board[0] + local_board[4] + local_board[8]
+    diagional_Right = local_board[2] + local_board[4] + local_board[6]
+
+    FirstWin = any(row_sum == 3) + any(col_sum == 3)
+    FirstWin += (diagional_Left == 3) + (diagional_Right == 3)
+
+    if FirstWin:
+        return cur_state.X * 100
+    
+    secondWin = any(row_sum == -3) + any(col_sum == -3)
+    secondWin += (diagional_Left == -3) + (diagional_Right == -3)
+
+    if secondWin:
+        return cur_state.O*100
+
+    X2 = 0
+    X1 = 0
+
+    for i in range(0,2):
+        if (row_sum[i] == 1):
+            if (local_board[3*i+1] != -1 and local_board[3*i + 2] != -1 and local_board[3*i] != -1):
+                X1 += 1
+        if (col_sum[i] == 1):
+            if (local_board[i+3] != -1 and local_board[i] != -1 and local_board[i + 6] != -1):
+                X1 += 1
+
+    if (diagional_Left == 1 and local_board[0] != -1 and local_board[4] != -1 and local_board[8] != -1):
+        X1 += 1
+    if (diagional_Right == 1 and local_board[2] != -1 and local_board[4] != -1 and local_board[6] != -1):
+        X1 += 1
+
+
+    O2 = 0
+    O1 = 0
+
+    for i in range(0,2):
+        if (row_sum[i] == -1):
+            if (local_board[3*i+1] != 1 and local_board[3*i + 2] != 1 and local_board[3*i] != 1):
+                O1 += 1
+        if (col_sum[i] == -1):
+            if (local_board[i+3] != 1 and local_board[i] != 1 and local_board[i + 6] != 1):
+                O1 += 1
+
+    if (diagional_Left == -1 and local_board[0] != 1 and local_board[4] != 1 and local_board[8] != 1):
+        O1 += 1
+    if (diagional_Right == -1 and local_board[2] != 1 and local_board[4] != 1 and local_board[6] != 1):
+        O1 += 1
+
+    X2 += np.count_nonzero(row_sum == 2) + np.count_nonzero(col_sum == 2) + diagional_Left == 2 + diagional_Right == 2 
+    O2 += np.count_nonzero(row_sum == -2) + np.count_nonzero(row_sum == -2) + diagional_Left == -2 + diagional_Right == -2
+  
+     
+    return (3*X2 + X1) - (3*O2 + O1)  
 # self.global_cells = np.zeros(9)
 # self.blocks = np.array([np.zeros((3, 3)) for x in range(9)])
