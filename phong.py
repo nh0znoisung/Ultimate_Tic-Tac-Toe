@@ -49,4 +49,5 @@ def select_move(cur_state: State, remain_time):
     #     print(a)
     #     return a
     # return None
-    return first_move(cur_state)
+    if cur_state.player_to_move == 1:
+        return first_move(cur_state)
