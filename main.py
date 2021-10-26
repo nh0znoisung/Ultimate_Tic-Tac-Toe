@@ -2,10 +2,7 @@ from state import State, State_2
 import time
 from importlib import import_module
 
-# Player 1
-win = 0
-draw = 0
-lose = 0
+
 
 def main(player_X, player_O, rule = 1):
     global win, draw, lose
@@ -71,8 +68,24 @@ def main(player_X, player_O, rule = 1):
     # print("X:", cur_state.count_X)
     # print("O:", cur_state.count_O)
 
-
+win = 0
+draw = 0
+lose = 0
 cnt = 10
+print("******We go first")
+for i in range(cnt):
+    print("Phrase {}:".format(i))
+    main('_1910663_1914637_1914405','random_agent',1)
+
+print("          | Win | Lose | Draw")
+print("Player 1  | {} | {} | {}".format(win, cnt - win - draw, draw))
+print("Player 2  | {} | {} | {}".format(cnt - win - draw, win, draw))
+print()
+
+win = 0
+draw = 0
+lose = 0
+print("******We go second")
 for i in range(cnt):
     print("Phrase {}:".format(i))
     main('random_agent','_1910663_1914637_1914405',1)
@@ -80,6 +93,7 @@ for i in range(cnt):
 print("          | Win | Lose | Draw")
 print("Player 1  | {} | {} | {}".format(win, cnt - win - draw, draw))
 print("Player 2  | {} | {} | {}".format(cnt - win - draw, win, draw))
+
 
 
  

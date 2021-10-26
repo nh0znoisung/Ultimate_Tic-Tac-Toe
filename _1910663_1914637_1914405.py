@@ -1,4 +1,4 @@
-from typing import ValuesView
+from state import State, UltimateTTT_Move
 import numpy as np
 import math
 import random
@@ -6,11 +6,54 @@ from copy import deepcopy
 from state import State
 
 maxDepth = 5
+i = 1
 
-def select_move(cur_state, remain_time): # return move in valid_moves -> UltimateTTT + Time ups
-    (best_move, cur_cost) = minimaxAB(cur_state, 0, -math.inf, math.inf)
-    return best_move
+def select_move(cur_state: State, remain_time): # return move in valid_moves -> UltimateTTT + Time ups
+    if cur_state.player_to_move == 1:
+        return first_move(cur_state)
+    else:
+        (best_move, cur_cost) = minimaxAB(cur_state, 0, -math.inf, math.inf)
+        return best_move
 
+
+def getBlock(x, y):
+    return 3*x + y
+
+
+def first_move(cur_state: State):
+    global i
+    if cur_state.blocks[4, 1, 1] == 0:
+        i = 1
+        return UltimateTTT_Move(4, 1, 1, cur_state.player_to_move)
+    else:
+        if i < 8:
+            b = getBlock(cur_state.previous_move.x, cur_state.previous_move.y)
+            i += 1
+            return UltimateTTT_Move(b, 1, 1, cur_state.player_to_move)
+        elif i == 8:
+            global x
+            global y
+            x = cur_state.previous_move.x
+            y = cur_state.previous_move.y
+            i += 1
+            return UltimateTTT_Move(getBlock(x, y), x, y, cur_state.player_to_move)
+        else:
+            if cur_state.previous_move.x == 1 and cur_state.previous_move.y == 1:
+                cur_state.free_move = True
+                op_x = 2 - x
+                op_y = 2 - y
+                b = getBlock(op_x, op_y)
+                if cur_state.blocks[b, x, y] == 0:
+                    return UltimateTTT_Move(b, x, y, cur_state.player_to_move)
+                else:
+                    return UltimateTTT_Move(b, op_x, op_y, cur_state.player_to_move)
+            else:
+                b = getBlock(cur_state.previous_move.x,
+                             cur_state.previous_move.y)
+                if cur_state.blocks[b, x, y] == 0:
+                    return UltimateTTT_Move(b, x, y, cur_state.player_to_move)
+                else:
+                    return UltimateTTT_Move(b, 2 - x, 2 - y, cur_state.player_to_move)
 
 
 def minimaxAB(cur_state: State, depth, alpha, beta): # return State in Ultimate
