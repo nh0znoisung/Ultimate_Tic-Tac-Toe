@@ -4,7 +4,7 @@ import numpy as np
 from state import UltimateTTT_Move
 
 MCTS = True
-model_path = "best_model.h5"
+model_path = "model_best.h5"
 mcts_search = 400
 # cpuct = 2
 
