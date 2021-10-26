@@ -7,12 +7,16 @@ from state import State
 
 maxDepth = 5
 i = 1
+x = 0
+y = 0
 
 def select_move(cur_state: State, remain_time): # return move in valid_moves -> UltimateTTT + Time ups
     if cur_state.player_to_move == 1:
         return first_move(cur_state)
     else:
+        print("asdfssadf")
         (best_move, cur_cost) = minimaxAB(cur_state, 0, -math.inf, math.inf)
+        print(best_move.x + best_move.y)
         return best_move
 
 
@@ -21,7 +25,7 @@ def getBlock(x, y):
 
 
 def first_move(cur_state: State):
-    global i
+    global i,x,y
     if cur_state.blocks[4, 1, 1] == 0:
         i = 1
         return UltimateTTT_Move(4, 1, 1, cur_state.player_to_move)
@@ -31,8 +35,6 @@ def first_move(cur_state: State):
             i += 1
             return UltimateTTT_Move(b, 1, 1, cur_state.player_to_move)
         elif i == 8:
-            global x
-            global y
             x = cur_state.previous_move.x
             y = cur_state.previous_move.y
             i += 1

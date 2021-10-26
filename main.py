@@ -71,7 +71,7 @@ def main(player_X, player_O, rule = 1):
 win = 0
 draw = 0
 lose = 0
-cnt = 10
+cnt = 100
 print("******We go first")
 for i in range(cnt):
     print("Phrase {}:".format(i))
