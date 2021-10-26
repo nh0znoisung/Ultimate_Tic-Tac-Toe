@@ -14,9 +14,9 @@ def select_move(cur_state: State, remain_time): # return move in valid_moves -> 
     if cur_state.player_to_move == 1:
         return first_move(cur_state)
     else:
-        print("asdfssadf")
+        
         (best_move, cur_cost) = minimaxAB(cur_state, 0, -math.inf, math.inf)
-        print(best_move.x + best_move.y)
+        
         return best_move
 
 
@@ -83,7 +83,9 @@ def minimaxAB(cur_state: State, depth, alpha, beta): # return State in Ultimate
                 best_move = move
                 return (best_move,v)
 
-            alpha = max(alpha, v)
+            if (alpha < v):
+                alpha = max(alpha, v)
+                best_move = move
 
         return (best_move, v)
 
@@ -95,13 +97,16 @@ def minimaxAB(cur_state: State, depth, alpha, beta): # return State in Ultimate
             new_state = deepcopy(cur_state)
             new_state.act_move(move)
             (new_move, new_cost) = minimaxAB(new_state, depth + 1, alpha, beta)
+
             v = min(v, new_cost)
 
             if (v <= alpha):
                 best_move = move
                 return (best_move,v)
 
-            beta = min(beta,v)
+            if (beta > v):
+                beta = min(beta,v)
+                best_move = move
 
         # print(cost_block(cur_state))
         return (best_move, v)
