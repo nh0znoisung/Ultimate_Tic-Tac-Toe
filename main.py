@@ -48,6 +48,8 @@ def main(player_X, player_O, rule = 1):
         if remain_time_X < 0 or remain_time_O < 0:
             # print("out of time")
             # print("winner:", dict_player[cur_state.player_to_move * -1])
+            if (remain_time_O < 0):
+                print('Gameover') 
             if cur_state.player_to_move == -1:
                 win += 1
             return
@@ -55,6 +57,7 @@ def main(player_X, player_O, rule = 1):
         if elapsed_time > 10.0:
             # print("elapsed time:", elapsed_time)
             # print("winner: ", dict_player[cur_state.player_to_move * -1])
+            print('Timeout')
             if cur_state.player_to_move == -1:
                 win += 1
             return
@@ -69,10 +72,10 @@ def main(player_X, player_O, rule = 1):
     # print("O:", cur_state.count_O)
 
 
-cnt = 50
+cnt = 10
 for i in range(cnt):
     print("Phrase {}:".format(i))
-    main('random_agent','_1910663_1914637_1914405', 1)
+    main('random_agent','_1910663_1914637_1914405',1)
 
 print("          | Win | Lose | Draw")
 print("Player 1  | {} | {} | {}".format(win, cnt - win - draw, draw))
