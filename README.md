@@ -1,5 +1,6 @@
-# Ultimate_Tic-Tac-Toe
-Ultimate Tic Tac Toe
+# Ultimate Tic Tac Toe
+**Ultimate Tic Tac Toe game for Assignment 1 - Introduction to Artificial Intelligence**
+
 
 ## Version
 Rule 1: 16/10/2021
