@@ -3,7 +3,7 @@
 
 
 ## Version
-Rule 1: 16/10/2021
+Rule 1: 16/10/2021  
 Rule 2: ...
 
 ## Rule
