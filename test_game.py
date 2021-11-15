@@ -156,11 +156,11 @@ def play_auto(player_X, player_O, rule = 1):
             # print(elapsed_time)
             remain_time_O -= elapsed_time
         
-        print(elapsed_time)
+        # print(elapsed_time)
         if elapsed_time > 10 or not new_move or (remain_time_O < -0.1) or (remain_time_X < -0.1):
             is_game_done = True
-            print("HelloWorld")
-            print(new_move.x + new_move.y)
+            # print("HelloWorld")
+            # print(new_move.x + new_move.y)
 
             continue
         
@@ -168,5 +168,5 @@ def play_auto(player_X, player_O, rule = 1):
         turn += 1
     
 
-play_auto('random_agent','_1910663_1914637_1914405')
-play_step_by_step('random_agent', '_1910663_1914637_1914405')
+play_auto('_1910663_1914637_1914405','_1910663_1914637_1914405')
+play_step_by_step('_1910663_1914637_1914405', '_1910663_1914637_1914405')
