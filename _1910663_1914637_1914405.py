@@ -1,4 +1,4 @@
-from state import State, UltimateTTT_Move
+from state import State, State_2, UltimateTTT_Move
 import numpy as np
 import math
 import random
@@ -10,56 +10,54 @@ i = 1
 x = 0
 y = 0
 
-def select_move(cur_state: State, remain_time): # return move in valid_moves -> UltimateTTT + Time ups
-    if cur_state.player_to_move == 1:
-        return first_move(cur_state)
-    else:
-        
+def select_move(cur_state: State_2, remain_time): # return move in valid_moves -> UltimateTTT + Time ups
+  
         (best_move, cur_cost) = minimaxAB(cur_state, 0, -math.inf, math.inf)
         if best_move == None:
-            return first_move(cur_state)
+            valid_moves = cur_state.get_valid_moves
+            best_move = np.random.choice(valid_moves)
         return best_move
 
 
-def getBlock(x, y):
-    return 3*x + y
+# def getBlock(x, y):
+#     return 3*x + y
 
 
-def first_move(cur_state: State):
-    global i,x,y
-    if cur_state.blocks[4, 1, 1] == 0:
-        i = 1
-        return UltimateTTT_Move(4, 1, 1, cur_state.player_to_move)
-    else:
-        if i < 8:
-            b = getBlock(cur_state.previous_move.x, cur_state.previous_move.y)
-            i += 1
-            return UltimateTTT_Move(b, 1, 1, cur_state.player_to_move)
-        elif i == 8:
-            x = cur_state.previous_move.x
-            y = cur_state.previous_move.y
-            i += 1
-            return UltimateTTT_Move(getBlock(x, y), x, y, cur_state.player_to_move)
-        else:
-            if cur_state.previous_move.x == 1 and cur_state.previous_move.y == 1:
-                cur_state.free_move = True
-                op_x = 2 - x
-                op_y = 2 - y
-                b = getBlock(op_x, op_y)
-                if cur_state.blocks[b, x, y] == 0:
-                    return UltimateTTT_Move(b, x, y, cur_state.player_to_move)
-                else:
-                    return UltimateTTT_Move(b, op_x, op_y, cur_state.player_to_move)
-            else:
-                b = getBlock(cur_state.previous_move.x,
-                             cur_state.previous_move.y)
-                if cur_state.blocks[b, x, y] == 0:
-                    return UltimateTTT_Move(b, x, y, cur_state.player_to_move)
-                else:
-                    return UltimateTTT_Move(b, 2 - x, 2 - y, cur_state.player_to_move)
+# def first_move(cur_state: State):
+#     global i,x,y
+#     if cur_state.blocks[4, 1, 1] == 0:
+#         i = 1
+#         return UltimateTTT_Move(4, 1, 1, cur_state.player_to_move)
+#     else:
+#         if i < 8:
+#             b = getBlock(cur_state.previous_move.x, cur_state.previous_move.y)
+#             i += 1
+#             return UltimateTTT_Move(b, 1, 1, cur_state.player_to_move)
+#         elif i == 8:
+#             x = cur_state.previous_move.x
+#             y = cur_state.previous_move.y
+#             i += 1
+#             return UltimateTTT_Move(getBlock(x, y), x, y, cur_state.player_to_move)
+#         else:
+#             if cur_state.previous_move.x == 1 and cur_state.previous_move.y == 1:
+#                 cur_state.free_move = True
+#                 op_x = 2 - x
+#                 op_y = 2 - y
+#                 b = getBlock(op_x, op_y)
+#                 if cur_state.blocks[b, x, y] == 0:
+#                     return UltimateTTT_Move(b, x, y, cur_state.player_to_move)
+#                 else:
+#                     return UltimateTTT_Move(b, op_x, op_y, cur_state.player_to_move)
+#             else:
+#                 b = getBlock(cur_state.previous_move.x,
+#                              cur_state.previous_move.y)
+#                 if cur_state.blocks[b, x, y] == 0:
+#                     return UltimateTTT_Move(b, x, y, cur_state.player_to_move)
+#                 else:
+#                     return UltimateTTT_Move(b, 2 - x, 2 - y, cur_state.player_to_move)
 
 
-def minimaxAB(cur_state: State, depth, alpha, beta): # return State in Ultimate
+def minimaxAB(cur_state: State_2, depth, alpha, beta): # return State in Ultimate
     # print("Hello World 1")
     
     if depth == maxDepth:
@@ -228,7 +226,7 @@ def calc_block(local_board, value: int, player, opponent):
 
     return change
 
-def heuristic_Cost(cur_state: State, value_state = None, turn_amount = 0):
+def heuristic_Cost(cur_state: State_2, value_state = None, turn_amount = 0):
     if value_state is None:
         value_state = {'won 1':100, 'won 2 in a row': 200, 'won game': math.inf, '2 in a row': 5, 'blocked 2':12
         , 'won block 2': 120}
