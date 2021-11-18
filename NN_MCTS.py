@@ -4,7 +4,7 @@ import numpy as np
 from state import UltimateTTT_Move
 
 MCTS = True
-model_path = "model_best.h5"
+model_path = "model_2.h5"
 mcts_search = 400
 # cpuct = 2
 
@@ -47,9 +47,6 @@ def select_move(cur_state, remain_time): # return move in valid_moves -> Ultimat
     policy = policy / np.sum(policy)
 
     action = np.argmax(policy)
-    print ("Action: ", action)
-    print ("Rolicy: ")
-    print (policy)
 
     return number_to_ultimate(action, cur_state)
 

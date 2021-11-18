@@ -168,5 +168,5 @@ def play_auto(player_X, player_O, rule = 1):
         turn += 1
     
 # Let minimaxAB for attack turns while MCTS for defense seems promising
-play_auto('random_agent','NN_MCTS',2)
+play_auto('Rule2','random_agent',2)
 play_step_by_step('_1910663_1914637_1914405', '_1910663_1914637_1914405')

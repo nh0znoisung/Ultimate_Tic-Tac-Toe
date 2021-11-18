@@ -15,6 +15,8 @@ def select_move(cur_state: State_2, remain_time): # return move in valid_moves -
         (best_move, cur_cost) = minimaxAB(cur_state, 0, -math.inf, math.inf)
         if best_move == None:
             valid_moves = cur_state.get_valid_moves
+            if (len(valid_moves) == 0):
+                return None
             best_move = np.random.choice(valid_moves)
         return best_move
 
