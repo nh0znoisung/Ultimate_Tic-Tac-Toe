@@ -4,7 +4,7 @@ from importlib import import_module
 
 
 
-def main(player_X, player_O, rule = 1):
+def main(player_X, player_O, rule = 2):
     global win, draw, lose
     dict_player = {1: 'X', -1: 'O'}
     if rule == 1:
@@ -75,7 +75,7 @@ cnt = 100
 print("******We go first")
 for i in range(cnt):
     print("Phrase {}:".format(i))
-    main('_1910663_1914637_1914405','random_agent',1)
+    main('_1910663_1914637_1914405','random_agent',2)
 
 print("          | Win | Lose | Draw")
 print("Player 1  | {} | {} | {}".format(win, cnt - win - draw, draw))
@@ -88,7 +88,7 @@ lose = 0
 print("******We go second")
 for i in range(cnt):
     print("Phrase {}:".format(i))
-    main('random_agent','_1910663_1914637_1914405',1)
+    main('random_agent','_1910663_1914637_1914405',2)
 
 print("          | Win | Lose | Draw")
 print("Player 1  | {} | {} | {}".format(win, cnt - win - draw, draw))

@@ -5,7 +5,7 @@ import random
 from copy import deepcopy
 from state import State
 
-maxDepth = 5
+maxDepth = 4
 i = 1
 x = 0
 y = 0
