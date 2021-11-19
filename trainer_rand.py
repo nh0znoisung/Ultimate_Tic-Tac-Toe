@@ -553,7 +553,7 @@ def train():
 
     # Load NN model
     if os.path.exists(os.path.join(save_model_path,'temp.h5')):
-      print("Loading Temp model from modes_def folder".format(num))
+      print("Loading Temp model from modes_def folder")
       nn = models.load_model(os.path.join(save_model_path,'temp.h5'))
     else:
       nn.save(os.path.join(save_model_path,'temp.h5'))  
