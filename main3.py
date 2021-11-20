@@ -71,9 +71,9 @@ win = 0
 draw = 0
 lose = 0
 cnt = 1000
-f = open("Statitis3.txt", "a")
+f = open("Statitis5.txt", "a")
 
-print("******model_2 go first")
+print("******model_56_314 go first")
 for i in range(cnt):
     print("Phrase {}:".format(i))
     main('NN_MCTS', 'random_agent', 2)
@@ -81,12 +81,12 @@ for i in range(cnt):
 print("          | Win | Lose | Draw")
 print("Player 1  | {} | {} | {}".format(win, cnt - win - draw, draw))
 print("Player 2  | {} | {} | {}".format(cnt - win - draw, win, draw))
-f.write("model_2 vs Random, model_2 go first, play 1k games: Win rate: {}".format(win/cnt))
+f.write("model_56_314 vs Random, model_56_314 go first, play 1k games: Win rate: {}".format(win/cnt))
 
 win = 0
 draw = 0
 lose = 0
-print("******model_2 go second")
+print("******model_56_314 go second")
 for i in range(cnt):
     print("Phrase {}:".format(i))
     main('random_agent', 'NN_MCTS', 2)
@@ -94,5 +94,5 @@ for i in range(cnt):
 print("          | Win | Lose | Draw")
 print("Player 1  | {} | {} | {}".format(win, cnt - win - draw, draw))
 print("Player 2  | {} | {} | {}".format(cnt - win - draw, win, draw))
-f.write("model_2 vs Random, model_2 go second, play 1k games: Win rate: {}".format(
+f.write("model_56_314 vs Random, model_56_314 go second, play 1k games: Win rate: {}".format(
     (cnt - win - draw)/cnt))

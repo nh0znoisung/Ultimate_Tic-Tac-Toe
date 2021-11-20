@@ -1,0 +1,1 @@
+model_2 vs Random, model_2 go first, play 1k games: Win rate: 0.393model_2 vs Random, model_2 go second, play 1k games: Win rate: 0.546

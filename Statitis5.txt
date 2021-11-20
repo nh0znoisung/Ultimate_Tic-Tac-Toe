@@ -1,0 +1,1 @@
+model_56_314 vs Random, model_56_314 go first, play 1k games: Win rate: 0.504model_56_314 vs Random, model_56_314 go second, play 1k games: Win rate: 0.616

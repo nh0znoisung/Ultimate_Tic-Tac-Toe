@@ -1,0 +1,1 @@
+model_52_284 vs Random, model_52_284 go first, play 1k games: Win rate: 0.408model_52_284 vs Random, model_52_284 go second, play 1k games: Win rate: 0.553

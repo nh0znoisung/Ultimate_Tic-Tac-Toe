@@ -1,0 +1,1 @@
+Rule2 vs Random, Rule2 go first, play 1k games: Win rate: 0.735
