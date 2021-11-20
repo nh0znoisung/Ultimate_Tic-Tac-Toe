@@ -1,72 +1,77 @@
+import tensorflow as tf
+from keras.models import load_model
+import numpy as np
 from state import State, State_2, UltimateTTT_Move
 import numpy as np
 import math
 import random
 from copy import deepcopy
-from state import State
 
 maxDepth = 4
-i = 1
-x = 0
-y = 0
+model_path = "model_best.h5"
 
-def select_move(cur_state: State_2, remain_time): # return move in valid_moves -> UltimateTTT + Time ups
-  
+nn = load_model(model_path)
+
+def select_move(cur_state: State_2, remain_time): 
+    # return move in valid_moves -> UltimateTTT + Time ups
+    if cur_state.player_to_move == 1:
+        # Minimax go first
         (best_move, cur_cost) = minimaxAB(cur_state, 0, -math.inf, math.inf)
         if best_move == None:
             valid_moves = cur_state.get_valid_moves
+            if (len(valid_moves) == 0):
+                return None
             best_move = np.random.choice(valid_moves)
         return best_move
+    else:
+        # Deep learning go second
+        policy, value = nn.predict(state_to_array(cur_state).reshape(1, 9, 9))
+        valid_moves = cur_state.get_valid_moves
+
+        if (len(valid_moves) == 0):
+            return None
+        possibleA = ultimate_to_array(valid_moves)
+
+        valids = np.zeros(81)
+        np.put(valids, possibleA, 1)
+        policy = policy.reshape(81) * valids
+        policy = policy / np.sum(policy)
+
+        action = np.argmax(policy)
+
+        return number_to_ultimate(action, cur_state)
 
 
-# def getBlock(x, y):
-#     return 3*x + y
+
+def state_to_array(state):
+    array = []
+    for i in range(9):
+        array.append(state.blocks[i][0])
+        array.append(state.blocks[i][1])
+        array.append(state.blocks[i][2])
+
+    nparray = np.array(array)
+    nparray = np.where(nparray == 0, 0.1, nparray)  # 0.1
+    return nparray
 
 
-# def first_move(cur_state: State):
-#     global i,x,y
-#     if cur_state.blocks[4, 1, 1] == 0:
-#         i = 1
-#         return UltimateTTT_Move(4, 1, 1, cur_state.player_to_move)
-#     else:
-#         if i < 8:
-#             b = getBlock(cur_state.previous_move.x, cur_state.previous_move.y)
-#             i += 1
-#             return UltimateTTT_Move(b, 1, 1, cur_state.player_to_move)
-#         elif i == 8:
-#             x = cur_state.previous_move.x
-#             y = cur_state.previous_move.y
-#             i += 1
-#             return UltimateTTT_Move(getBlock(x, y), x, y, cur_state.player_to_move)
-#         else:
-#             if cur_state.previous_move.x == 1 and cur_state.previous_move.y == 1:
-#                 cur_state.free_move = True
-#                 op_x = 2 - x
-#                 op_y = 2 - y
-#                 b = getBlock(op_x, op_y)
-#                 if cur_state.blocks[b, x, y] == 0:
-#                     return UltimateTTT_Move(b, x, y, cur_state.player_to_move)
-#                 else:
-#                     return UltimateTTT_Move(b, op_x, op_y, cur_state.player_to_move)
-#             else:
-#                 b = getBlock(cur_state.previous_move.x,
-#                              cur_state.previous_move.y)
-#                 if cur_state.blocks[b, x, y] == 0:
-#                     return UltimateTTT_Move(b, x, y, cur_state.player_to_move)
-#                 else:
-#                     return UltimateTTT_Move(b, 2 - x, 2 - y, cur_state.player_to_move)
+def ultimate_to_array(u):
+    poss = []
+    for ulti in u:
+        poss.append(ulti.index_local_board * 9 + ulti.x * 3 + ulti.y)
+    return poss
+
+
+def number_to_ultimate(n, cur_state):
+    return UltimateTTT_Move(int(n/9), int((n % 9)/3), n % 3, cur_state.player_to_move)
+
 
 
 def minimaxAB(cur_state: State_2, depth, alpha, beta): # return State in Ultimate
-    # print("Hello World 1")
-    
     if depth == maxDepth:
         return (None, heuristic_Cost(cur_state))
-    # print("Hello World 3")
 
     valid_moves = cur_state.get_valid_moves
-    #random.shuffle(valid_moves) # random the list for the fair chance
-    # print("Hello World 4")
 
     if cur_state.player_to_move == 1:
         #Maximizing player
@@ -107,7 +112,6 @@ def minimaxAB(cur_state: State_2, depth, alpha, beta): # return State in Ultimat
                 beta = min(beta,v)
                 best_move = move
 
-        # print(cost_block(cur_state))
         return (best_move, v)
 
 def calc_twos(local_board, value: int, player, opponent):
@@ -178,7 +182,6 @@ def calc_twos(local_board, value: int, player, opponent):
 
 def calc_block(local_board, value: int, player, opponent):
     change = 0
-    #local_board = np.reshape(local_board(3,3))
     for y in range(len(local_board)):
         to_change = 0
 
