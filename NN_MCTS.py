@@ -39,6 +39,9 @@ def select_move(cur_state, remain_time): # return move in valid_moves -> Ultimat
     # more faster 
     policy, value = nn.predict(state_to_array(cur_state).reshape(1,9,9))
     valid_moves = cur_state.get_valid_moves
+
+    if (len(valid_moves) == 0):
+        return None
     possibleA = ultimate_to_array(valid_moves)
 
     valids = np.zeros(81)
