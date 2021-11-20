@@ -3,15 +3,14 @@ import time
 from importlib import import_module
 
 
-
-def main(player_X, player_O, rule = 2):
+def main(player_X, player_O, rule=2):
     global win, draw, lose
     dict_player = {1: 'X', -1: 'O'}
     if rule == 1:
         cur_state = State()
     else:
         cur_state = State_2()
-    turn = 1    
+    turn = 1
 
     limit = 81
     remain_time_X = 120
@@ -19,7 +18,6 @@ def main(player_X, player_O, rule = 2):
 
     player_1 = import_module(player_X)
     player_2 = import_module(player_O)
-
 
     while turn <= limit:
         # print("turn:", turn, end='\n\n')
@@ -46,7 +44,7 @@ def main(player_X, player_O, rule = 2):
             # print("out of time")
             # print("winner:", dict_player[cur_state.player_to_move * -1])
             if (remain_time_O < 0):
-                print('Gameover') 
+                print('Gameover')
             if cur_state.player_to_move == -1:
                 win += 1
             return
@@ -68,32 +66,60 @@ def main(player_X, player_O, rule = 2):
     # print("X:", cur_state.count_X)
     # print("O:", cur_state.count_O)
 
-win = 0
-draw = 0
-lose = 0
-cnt = 100
-print("******We go first")
-for i in range(cnt):
-    print("Phrase {}:".format(i))
-    main('_1910663_1914637_1914405','random_agent',2)
-
-print("          | Win | Lose | Draw")
-print("Player 1  | {} | {} | {}".format(win, cnt - win - draw, draw))
-print("Player 2  | {} | {} | {}".format(cnt - win - draw, win, draw))
-print()
 
 win = 0
 draw = 0
 lose = 0
-print("******We go second")
+cnt = 1000
+f = open("Statitis.txt", "a")
+print("******Rule2 go first")
 for i in range(cnt):
     print("Phrase {}:".format(i))
-    main('random_agent','_1910663_1914637_1914405',2)
+    main('Rule2', 'random_agent', 2)
 
 print("          | Win | Lose | Draw")
 print("Player 1  | {} | {} | {}".format(win, cnt - win - draw, draw))
 print("Player 2  | {} | {} | {}".format(cnt - win - draw, win, draw))
+# print()
+f.write("Rule2 vs Random, Rule2 go first, play 1k games: Win rate: {}".format(win/cnt))
 
+win = 0
+draw = 0
+lose = 0
+print("******Rule2 go second")
+for i in range(cnt):
+    print("Phrase {}:".format(i))
+    main('random_agent', 'Rule2', 2)
 
+print("          | Win | Lose | Draw")
+print("Player 1  | {} | {} | {}".format(win, cnt - win - draw, draw))
+print("Player 2  | {} | {} | {}".format(cnt - win - draw, win, draw))
+f.write("Rule2 vs Random, Rule2 go second, play 1k games: Win rate: {}".format(
+    (cnt - win - draw)/cnt))
 
- 
+win = 0
+draw = 0
+lose = 0
+print("******model_2 go first")
+for i in range(cnt):
+    print("Phrase {}:".format(i))
+    main('NN_MCTS', 'random_agent', 2)
+
+print("          | Win | Lose | Draw")
+print("Player 1  | {} | {} | {}".format(win, cnt - win - draw, draw))
+print("Player 2  | {} | {} | {}".format(cnt - win - draw, win, draw))
+f.write("model_2 vs Random, model_2 go first, play 1k games: Win rate: {}".format(win/cnt))
+
+win = 0
+draw = 0
+lose = 0
+print("******model_2 go second")
+for i in range(cnt):
+    print("Phrase {}:".format(i))
+    main('random_agent', 'NN_MCTS', 2)
+
+print("          | Win | Lose | Draw")
+print("Player 1  | {} | {} | {}".format(win, cnt - win - draw, draw))
+print("Player 2  | {} | {} | {}".format(cnt - win - draw, win, draw))
+f.write("model_2 vs Random, model_2 go second, play 1k games: Win rate: {}".format(
+    (cnt - win - draw)/cnt))
